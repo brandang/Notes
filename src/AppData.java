@@ -1,11 +1,22 @@
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Class that is responsible for uploading and downloading the program data from Google Drive`s appdatafolder.
@@ -25,6 +36,9 @@ public class AppData {
     // DataStoreFactory, used to store authentication data.
     private DataStoreFactory dataStoreFactory;
 
+    // Credentials to access user data.
+    private Credential credentials;
+
     /**
      * Creates a new AppData instance, which can be used to download and upload application data.
      */
@@ -38,7 +52,7 @@ public class AppData {
 
         try {
             this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-            this.dataStoreFactory = new FileDataStoreFactory();
+            this.dataStoreFactory = new FileDataStoreFactory(Constants.DATA_STORE_DIR);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (Throwable t) {
@@ -50,23 +64,60 @@ public class AppData {
     /**
      * Ask the user permission to access the appdatafolder on Google Drive.
      */
-    public void askUserPermission() {
+    public void acquireCredentials() throws IOException {
+        // Load client secrets from file.
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(this.jsonFactory,
+                new InputStreamReader(new FileInputStream(Constants.CLIENT_SECRETS_FILEPATH)));
 
+        // Set up authorization code flow.
+        GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(
+            httpTransport, this.jsonFactory, clientSecrets,
+            // Access scopes, where to store credentials, and whether to always ask user for permissions.
+            Collections.singleton(DriveScopes.DRIVE_APPDATA));
+        builder.setDataStoreFactory(dataStoreFactory).setApprovalPrompt("force");
+        GoogleAuthorizationCodeFlow flow = builder.build();
+
+        // Authorize and get credentials.
+        this.credentials = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+    }
+
+    /**
+     * Returns the id of the save data file.
+     * @return The id.
+     */
+    public String getSaveFileID() {
+        return null;
     }
 
     /**
      * Downloads and returns the app data.
-     * @return The app data.
+     * @return The app data. Returns null if it does not exist.
      */
     public String downloadData() {
         return null;
     }
 
     /**
-     * Uploads the app data.
+     * Uploads the app data. Overwrites the current data file, or creates a new one if it does not exist.
      * @param data The data to upload.
      */
     public void uploadData(String data) {
 
     }
+
+    /**
+     * Update the data file.
+     * @param data
+     */
+    public void updateData(String data) {
+
+    }
+
+    /**
+     * Creates a new data file and uploads it.
+     */
+    public void createAndUpload() {}
+
+
+
 }
