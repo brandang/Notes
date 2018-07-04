@@ -10,13 +10,13 @@ import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
-import java.util.Set;
 
 /**
  * Class that is responsible for uploading and downloading the program data from Google Drive`s appdatafolder.
@@ -82,7 +82,28 @@ public class AppData {
     }
 
     /**
-     * Returns the id of the save data file.
+     * Returns the save file. Returns null if the file does not exist.
+     * @return The file.
+     */
+    public File getSaveFile() throws IOException {
+        // File searcher.
+        Drive.Files.List fileSearch = drive.files().list();
+        // Where to search.
+        fileSearch.setSpaces("appdatafolder");
+        // Start search.
+        FileList files = fileSearch.execute();
+
+        // Look for the right file and return it.
+        for (File file : files.getItems()) {
+            if (file.getTitle().equals(Constants.DATA_FILE_NAME)) {
+                return file;
+            }
+        }
+        return null;
+    }
+
+    /**r
+     * Returns the id of the save data file. Returns null if the file does not exist.
      * @return The id.
      */
     public String getSaveFileID() {

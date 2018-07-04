@@ -13,4 +13,7 @@ public class Constants {
 
     // Filepath for client_secrets file.
     final public static String CLIENT_SECRETS_FILEPATH = "datastore/client_secrets.json";
+
+    // Name for save data file.
+    final public static String DATA_FILE_NAME = "save_data";
 } 
