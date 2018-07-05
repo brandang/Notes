@@ -8,12 +8,13 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
@@ -52,7 +53,8 @@ public class AppData {
 
         try {
             this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-            this.dataStoreFactory = new FileDataStoreFactory(Constants.DATA_STORE_DIR);
+            // Store Credential data in memory.
+            this.dataStoreFactory = new MemoryDataStoreFactory();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (Throwable t) {
@@ -65,9 +67,9 @@ public class AppData {
      * Ask the user permission to access the appdatafolder on Google Drive.
      */
     public void acquireCredentials() throws IOException {
-        // Load client secrets from file.
+        // Load client secrets from Constants.
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(this.jsonFactory,
-                new InputStreamReader(new FileInputStream(Constants.CLIENT_SECRETS_FILEPATH)));
+                new InputStreamReader(new ByteArrayInputStream(Constants.CLIENT_SECRETS.getBytes())));
 
         // Set up authorization code flow.
         GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(
@@ -102,7 +104,7 @@ public class AppData {
         return null;
     }
 
-    /**r
+    /**
      * Returns the id of the save data file. Returns null if the file does not exist.
      * @return The id.
      */
