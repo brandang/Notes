@@ -4,6 +4,8 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.media.MediaHttpDownloader;
+import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
@@ -14,9 +16,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Collections;
 
 /**
@@ -60,11 +60,11 @@ public class AppData {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-        System.exit(1);
     }
 
     /**
-     * Ask the user permission to access the appdatafolder on Google Drive.
+     * Ask the user permission to access the appdatafolder on Google Drive. Must call this method before using
+     * AppData class.
      */
     public void acquireCredentials() throws IOException {
         // Load client secrets from Constants.
@@ -84,40 +84,98 @@ public class AppData {
     }
 
     /**
-     * Returns the save file. Returns null if the file does not exist.
+     * Determines whether or not the Credentials are currently valid to access appdatafolder. Raises
+     * CredentialInvalidException if not, does nothing if it is valid.
+     */
+    private void checkCredentials() {
+        if (this.credentials == null) {
+            throw new CredentialInvalidException();
+        }
+    }
+
+    /**
+     * Returns the save file. Returns null if the file does not exist or if there was an error accessing the file.
      * @return The file.
      */
-    public File getSaveFile() throws IOException {
+    private File getSaveFile(){
         // File searcher.
-        Drive.Files.List fileSearch = drive.files().list();
-        // Where to search.
-        fileSearch.setSpaces("appdatafolder");
-        // Start search.
-        FileList files = fileSearch.execute();
+        Drive.Files.List fileSearch;
+        try {
+            fileSearch = drive.files().list();
+            // Where to search.
+            fileSearch.setSpaces("appdatafolder");
+            // Start search.
+            FileList files = fileSearch.execute();
 
-        // Look for the right file and return it.
-        for (File file : files.getItems()) {
-            if (file.getTitle().equals(Constants.DATA_FILE_NAME)) {
-                return file;
+            // Look for the right file and return it.
+            for (File file : files.getItems()) {
+                if (file.getTitle().equals(Constants.DATA_FILE_NAME)) {
+                    return file;
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
         return null;
     }
 
     /**
-     * Returns the id of the save data file. Returns null if the file does not exist.
+     * Returns the id of the save data file. Returns null if the file does not exist/inaccessible.
      * @return The id.
      */
-    public String getSaveFileID() {
-        return null;
+    private String getSaveFileID() {
+        File saveFile = this.getSaveFile();
+        if (saveFile == null) {
+            return null;
+        } else {
+            return saveFile.getId();
+        }
+    }
+
+    /**
+     * Returns the download URL of the save data file. Returns null if the file does not exist/inaccessible.
+     * @return The download URL.
+     */
+    private String getSaveFileURL() {
+        File saveFile = this.getSaveFile();
+        if (saveFile == null) {
+            return null;
+        } else {
+            return saveFile.getDownloadUrl();
+        }
     }
 
     /**
      * Downloads and returns the app data.
-     * @return The app data. Returns null if it does not exist.
+     * @return The app data. Returns empty String if it does not exist.
      */
     public String downloadData() {
-        return null;
+        this.checkCredentials();
+        // Default value to return.
+        String data = "";
+        String downloadUrl = this.getSaveFileURL();
+
+        // Make sure downloadURL is valid.
+        if (downloadUrl == null) {
+            return data;
+        }
+
+        // Download file to memory.
+        OutputStream output = new ByteArrayOutputStream();
+        MediaHttpDownloader downloader =
+                new MediaHttpDownloader(this.httpTransport, this.drive.getRequestFactory().getInitializer());
+        downloader.setDirectDownloadEnabled(false);
+        try {
+            downloader.download(new GenericUrl(downloadUrl), output);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return data;
+        }
+
+        // Convert to String and return.
+        data = output.toString();
+        return data;
     }
 
     /**
@@ -141,6 +199,17 @@ public class AppData {
      */
     public void createAndUpload() {}
 
+    /**
+     * Exception that gets created whenever user attempts to use AppData class to access/modify files without sufficient
+     * permission for Google Drive. Prints out error message upon creation.
+     */
+    private class CredentialInvalidException extends RuntimeException {
 
-
+        /**
+         * Creates a new CredentialInvalidException and prints out error message.
+         */
+        private CredentialInvalidException() {
+            super(Constants.CREDENTIAL_EXCEPTION_MSG);
+        }
+    }
 }

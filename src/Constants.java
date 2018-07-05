@@ -24,4 +24,7 @@ public class Constants {
             "oauth2/v1/certs\\\",\\\"client_secret\\\":\\\"Pyq2ArAEO4hqcnraEVbh6fia\\\",\\\"redirect_uris\\\":[\\\"u" +
             "rn:ietf:wg:oauth:2.0:oob\\\",\\\"http://localhost\\\"]}}";
 
+    final public static String CREDENTIAL_EXCEPTION_MSG = "Cannot access Google Drive. Credential either invalid " +
+            "or permission not attained yet.";
+
 }
