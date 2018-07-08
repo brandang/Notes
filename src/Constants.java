@@ -14,7 +14,13 @@ public class Constants {
     final public static String CLIENT_SECRETS_FILEPATH = "datastore/client_secrets.json";
 
     // Name for save data file.
-    final public static String DATA_FILE_NAME = "save_data";
+    final public static String SAVE_FILE_NAME = "save_data";
+
+    // Type for save data file.
+    final public static String SAVE_FILE_TYPE = "text/txt";
+
+    // AppDataFolder Scope.
+    final public static String APPDATAFOLDER = "appdatafolder";
 
     // Client Secrets data.
     final public static String CLIENT_SECRETS = "\"{\\\"installed\\\":{\\\"client_id\\\":\\\"579441411049-3bqkmmem" +
@@ -24,7 +30,13 @@ public class Constants {
             "oauth2/v1/certs\\\",\\\"client_secret\\\":\\\"Pyq2ArAEO4hqcnraEVbh6fia\\\",\\\"redirect_uris\\\":[\\\"u" +
             "rn:ietf:wg:oauth:2.0:oob\\\",\\\"http://localhost\\\"]}}";
 
+    // Whether or not to upload data in chunks.
+    final public static boolean USE_DIRECT_UPLOAD = true;
+
+    // Message to display for Exception.
     final public static String CREDENTIAL_EXCEPTION_MSG = "Cannot access Google Drive. Credential either invalid " +
             "or permission not attained yet.";
+
+
 
 }

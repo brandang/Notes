@@ -5,6 +5,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
+import com.google.api.client.googleapis.media.MediaHttpUploader;
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -15,6 +17,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.ParentReference;
 
 import java.io.*;
 import java.util.Collections;
@@ -103,13 +106,13 @@ public class AppData {
         try {
             fileSearch = drive.files().list();
             // Where to search.
-            fileSearch.setSpaces("appdatafolder");
+            fileSearch.setSpaces(Constants.APPDATAFOLDER);
             // Start search.
             FileList files = fileSearch.execute();
 
             // Look for the right file and return it.
             for (File file : files.getItems()) {
-                if (file.getTitle().equals(Constants.DATA_FILE_NAME)) {
+                if (file.getTitle().equals(Constants.SAVE_FILE_NAME)) {
                     return file;
                 }
             }
@@ -147,6 +150,17 @@ public class AppData {
     }
 
     /**
+     * Determines whether or not the save file exists on the user`s Drive.
+     * @return True for yes, false for no.
+     */
+    private boolean saveFileExists() {
+        if (this.getSaveFile() == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Downloads and returns the app data.
      * @return The app data. Returns empty String if it does not exist.
      */
@@ -179,25 +193,69 @@ public class AppData {
     }
 
     /**
-     * Uploads the app data. Overwrites the current data file, or creates a new one if it does not exist.
+     * Uploads the app data. Overwrites the current data file, or creates a new one if it does not exist. Throws
+     * exception if credentials are invalid.
      * @param data The data to upload.
      */
     public void uploadData(String data) {
-
+        this.checkCredentials();
+        try {
+            if (this.saveFileExists()) {
+                this.updateData(data);
+            } else {
+                this.createAndUpload(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Update the data file.
-     * @param data
+     * @param data The data.
      */
-    public void updateData(String data) {
+    private void updateData(String data) throws IOException {
 
+        File fileMetadata = new File();
+        fileMetadata.setTitle(Constants.SAVE_FILE_NAME);
+        // Where to place the file.
+        ParentReference pr = new ParentReference();
+        pr.setId(Constants.APPDATAFOLDER);
+        fileMetadata.setParents(Collections.singletonList(pr));
+
+        // Get the file from Drive.
+        String fileID = this.getSaveFileID();
+
+        // Save data in memory and upload.
+        ByteArrayContent content = new ByteArrayContent(Constants.SAVE_FILE_TYPE, data.getBytes());
+        Drive.Files.Update update = drive.files().update(fileID, fileMetadata, content);
+
+        // Start uploading.
+        update.execute();
     }
 
     /**
      * Creates a new data file and uploads it.
+     * @param data The data.
      */
-    public void createAndUpload() {}
+    private void createAndUpload(String data) throws IOException {
+        // Create Google Drive file.
+        File fileMetadata = new File();
+        fileMetadata.setTitle(Constants.SAVE_FILE_NAME);
+
+        // Store data in memory.
+        ByteArrayContent content = new ByteArrayContent(Constants.SAVE_FILE_TYPE, data.getBytes());
+
+        // Insert file into drive.
+        Drive.Files.Insert insert = drive.files().insert(fileMetadata, content);
+        // Get the media uploader.
+        MediaHttpUploader uploader = insert.getMediaHttpUploader();
+
+        // Set whether or not to upload entire thing at once, or in chunks.
+        uploader.setDirectUploadEnabled(Constants.USE_DIRECT_UPLOAD);
+        // Start uploading.
+        insert.execute();
+    }
 
     /**
      * Exception that gets created whenever user attempts to use AppData class to access/modify files without sufficient
