@@ -97,7 +97,8 @@ public class AppData {
     }
 
     /**
-     * Returns the save file. Returns null if the file does not exist or if there was an error accessing the file.
+     * Returns the save file. Returns null if the file does not exist. Throws exception if there was an error accessing
+     * the file.
      * @return The file.
      */
     private File getSaveFile(){
@@ -118,7 +119,7 @@ public class AppData {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new CredentialInvalidException();
         }
         return null;
     }
@@ -154,14 +155,11 @@ public class AppData {
      * @return True for yes, false for no.
      */
     private boolean saveFileExists() {
-        if (this.getSaveFile() == null) {
-            return false;
-        }
-        return true;
+        return this.getSaveFile() != null;
     }
 
     /**
-     * Downloads and returns the app data.
+     * Downloads and returns the app data. Throws exception if credentials are invalid.
      * @return The app data. Returns empty String if it does not exist.
      */
     public String downloadData() {
