@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -7,7 +8,11 @@ import javafx.stage.Stage;
 public class Launcher extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle(Constants.WINDOW_TITLE);
+        NotepadGUI gui = new NotepadGUI();
+        Scene scene = gui.getScene();
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }

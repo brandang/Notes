@@ -37,6 +37,10 @@ public class Constants {
     final public static String CREDENTIAL_EXCEPTION_MSG = "Cannot access Google Drive. Credential either invalid " +
             "or permission not attained yet.";
 
+    // Initial Window dimensions.
+    final public static int WINDOW_WIDTH = 500;
+
+    final public static int WINDOW_HEIGHT = 350;
 
 
 }
