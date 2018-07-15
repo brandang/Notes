@@ -1,6 +1,3 @@
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
 
 /**
  * A class that stores constants for the program.
@@ -38,9 +35,20 @@ public class Constants {
             "or permission not attained yet.";
 
     // Initial Window dimensions.
-    final public static int WINDOW_WIDTH = 500;
+    final public static int WINDOW_WIDTH = 300;
 
-    final public static int WINDOW_HEIGHT = 350;
+    final public static int WINDOW_HEIGHT = 450;
+
+    // The style of the background.
+    final public static String BACKGROUND_STYLE = "-fx-background-color: #464646";
+
+    // The style for the top menu bar.
+    final public static String MENU_STYLE = "-fx-background-color: #282828";
+
+    // The height of the menu.
+    final public static double MENU_HEIGHT = 50;
+
+
 
 
 }

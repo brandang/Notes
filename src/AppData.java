@@ -87,11 +87,22 @@ public class AppData {
     }
 
     /**
+     * Determines whether or not the Credentials are currently valid to access appdatafolder.
+     * @return True for yes, false for no.
+     */
+    public boolean credentialsValid() {
+        if (this.credentials == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Determines whether or not the Credentials are currently valid to access appdatafolder. Raises
      * CredentialInvalidException if not, does nothing if it is valid.
      */
     private void checkCredentials() {
-        if (this.credentials == null) {
+        if (this.credentialsValid() == false) {
             throw new CredentialInvalidException();
         }
     }
