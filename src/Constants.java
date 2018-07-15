@@ -41,12 +41,22 @@ public class Constants {
 
     // The style of the background.
     final public static String BACKGROUND_STYLE = "-fx-background-color: #464646";
+//    final public static String BACKGROUND_STYLE = "-fx-background-color: red";
 
     // The style for the top menu bar.
     final public static String MENU_STYLE = "-fx-background-color: #282828";
 
     // The height of the menu.
     final public static double MENU_HEIGHT = 50;
+
+    // Style sheet for Text Area file path.
+    final public static String TEXTAREA_STYLE_PATH = "textarea.css";
+
+    // Style for Text Area.
+    final public static String TEXTAREA_STYLE = "-fx-control-inner-background: #464646; -fx-border-style: none none " +
+            "none none; -fx-border-width: 0 0 0 0; -fx-border-color: transparent; -fx-background-insets: 0 0 0 0; " +
+            "-fx-background-color: transparent, transparent, transparent, transparent; -fx-focus-color: transparent;" +
+            "-fx-faint-focus-color: transparent; -fx-background-radius: 0; -fx-control-inner-background-radius: 0;";
 
 
 

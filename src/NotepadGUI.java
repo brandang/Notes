@@ -13,6 +13,9 @@ public class NotepadGUI implements ProgramFrontend {
     // Menu bar.
     private HBox menuBar;
 
+    // The text area.
+    private CustomTextArea textArea;
+
     /**
      * Create a new GUI.
      */
@@ -27,11 +30,17 @@ public class NotepadGUI implements ProgramFrontend {
         this.background = new BorderPane();
         this.background.setStyle(Constants.BACKGROUND_STYLE);
 
+        // Menu at the top.
         this.menuBar = new HBox();
         this.menuBar.setStyle(Constants.MENU_STYLE);
         this.menuBar.setPrefHeight(Constants.MENU_HEIGHT);
 
+        // The text area.
+        this.textArea = new CustomTextArea("Testing 123");
+
+        // Add components to GUI.
         this.background.setTop(this.menuBar);
+        this.background.setCenter(this.textArea);
     }
 
     @Override
