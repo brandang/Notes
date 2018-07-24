@@ -36,7 +36,8 @@ public class NotepadGUI implements ProgramFrontend {
         this.menuBar.setPrefHeight(Constants.MENU_HEIGHT);
 
         // The text area.
-        this.textArea = new CustomTextArea("Testing 123");
+//        this.textArea = new CustomTextArea("Testing 123");
+        this.textArea = new CustomTextArea("Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123");
 
         // Add components to GUI.
         this.background.setTop(this.menuBar);

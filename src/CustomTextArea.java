@@ -1,4 +1,8 @@
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+
+import java.awt.*;
 
 /**
  * A custom TextArea with a customized look and feel.
@@ -23,11 +27,13 @@ public class CustomTextArea extends TextArea {
     }
 
     /**
-     * Sets up the look and feel of the CustomTextArea.
+     * Sets up the look and feel of the CustomTextArea. Must be called only after Scene is created and shown.
      */
-    private void setup() {
+    public void setup() {
+        // Setup style.
         this.setStyle(Constants.TEXTAREA_STYLE);
         this.getStylesheets().add(CustomTextArea.class.getResource(Constants.TEXTAREA_STYLE_PATH).toExternalForm());
-//        this.scroll
+        // Disables horizontal scrolling.
+        this.setWrapText(true);
     }
 } 

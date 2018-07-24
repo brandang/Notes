@@ -52,6 +52,9 @@ public class Constants {
     // Style sheet for Text Area file path.
     final public static String TEXTAREA_STYLE_PATH = "textarea.css";
 
+    // Style sheet for the custom Scroll Bar in the Text Area filepath.
+    final public static String SCROLLBAR_STYLE_PATH = "scrollbar.css";
+
     // Style for Text Area.
     final public static String TEXTAREA_STYLE = "-fx-control-inner-background: #464646; -fx-border-style: none none " +
             "none none; -fx-border-width: 0 0 0 0; -fx-border-color: transparent; -fx-background-insets: 0 0 0 0; " +
