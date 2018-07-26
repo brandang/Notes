@@ -1,3 +1,4 @@
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -35,5 +36,7 @@ public class CustomTextArea extends TextArea {
         this.getStylesheets().add(CustomTextArea.class.getResource(Constants.TEXTAREA_STYLE_PATH).toExternalForm());
         // Disables horizontal scrolling.
         this.setWrapText(true);
+        // Sets the theme of the Context Menu upon a user`s right click.
+        ContextMenu contextMenu = this.getContextMenu();
     }
 } 

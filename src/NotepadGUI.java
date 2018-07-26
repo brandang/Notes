@@ -1,6 +1,8 @@
 import javafx.scene.Scene;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  * The main GUI for the program.
@@ -35,12 +37,20 @@ public class NotepadGUI implements ProgramFrontend {
         this.menuBar.setStyle(Constants.MENU_STYLE);
         this.menuBar.setPrefHeight(Constants.MENU_HEIGHT);
 
+        // Separator.
+        Separator separator = new Separator();
+        separator.setStyle(Constants.MENU_SEPARATOR_STYLE);
+
+        VBox menuContainer = new VBox();
+        menuContainer.getChildren().add(this.menuBar);
+        menuContainer.getChildren().add(separator);
+
         // The text area.
 //        this.textArea = new CustomTextArea("Testing 123");
         this.textArea = new CustomTextArea("Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123");
 
         // Add components to GUI.
-        this.background.setTop(this.menuBar);
+        this.background.setTop(menuContainer);
         this.background.setCenter(this.textArea);
     }
 

@@ -1,3 +1,6 @@
+/*
+ Background of text area.
+ */
 .text-area {
     -fx-background-insets: 0;
     -fx-background-color: transparent, transparent, transparent, transparent;
@@ -11,17 +14,23 @@
     -fx-background-color: #464646;
 }
 
+/*
+Colour when text is highlighted.
+ */
 .text-area:focused {
-    -fx-highlight-fill: #7ecfff;
+    -fx-highlight-fill: #3486a2;
 }
 
 .text-area .content {
     -fx-padding: 10px;
-    -fx-text-fill: gray;
-    -fx-highlight-fill: #7ecfff;
+    -fx-text-fill: #d6d6d6;
+    -fx-highlight-fill: #3486a2;
     -fx-background-radius: 0;
 }
 
+/*
+ ScrollBar track.
+ */
 .text-area .scroll-bar{
     -fx-background-color: transparent;
 }
@@ -44,6 +53,9 @@
     -fx-background-insets: 0 6 0 6;
     -fx-background-radius: 1em;
 }
+/*
+Disable up and down buttons for ScrollBar.
+ */
 .text-area .scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
     -fx-background-color:transparent;
 }
@@ -52,4 +64,24 @@
 }
 .text-area .scroll-bar:vertical .decrement-arrow {
     -fx-background-color:transparent;
+}
+
+/*
+Context menu; accessed via right click.
+ */
+.context-menu {
+    -fx-background-color: #555555;
+}
+.menu-item .label {
+    -fx-text-fill: #d6d6d6;
+}
+.menu-item:focused .label {
+    -fx-text-fill: #d6d6d6;
+}
+/*
+Make builtin separator line invisible.
+ */
+.separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 0px;
 }
