@@ -28,7 +28,7 @@ public class CustomTextArea extends TextArea {
     }
 
     /**
-     * Sets up the look and feel of the CustomTextArea. Must be called only after Scene is created and shown.
+     * Sets up the look and feel of the CustomTextArea.
      */
     public void setup() {
         // Setup style.
@@ -36,7 +36,5 @@ public class CustomTextArea extends TextArea {
         this.getStylesheets().add(CustomTextArea.class.getResource(Constants.TEXTAREA_STYLE_PATH).toExternalForm());
         // Disables horizontal scrolling.
         this.setWrapText(true);
-        // Sets the theme of the Context Menu upon a user`s right click.
-        ContextMenu contextMenu = this.getContextMenu();
     }
 } 

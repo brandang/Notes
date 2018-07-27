@@ -1,3 +1,5 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +41,8 @@ public class NotepadGUI implements ProgramFrontend {
 
         // Separator.
         Separator separator = new Separator();
-        separator.setStyle(Constants.MENU_SEPARATOR_STYLE);
+        separator.getStylesheets().add(NotepadGUI.class.getResource(Constants.MENU_SEPARATOR_STYLE_PATH).toExternalForm());
+        separator.setOrientation(Orientation.HORIZONTAL);
 
         VBox menuContainer = new VBox();
         menuContainer.getChildren().add(this.menuBar);
