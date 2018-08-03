@@ -22,7 +22,7 @@ Colour when text is highlighted.
 }
 
 .text-area .content {
-    -fx-padding: 10px;
+    -fx-padding: 0 10 10 10;
     -fx-text-fill: #d6d6d6;
     -fx-highlight-fill: #3486a2;
     -fx-background-radius: 0;

@@ -1,7 +1,11 @@
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -17,8 +21,13 @@ public class NotepadGUI implements ProgramFrontend {
     // Menu bar.
     private HBox menuBar;
 
+    // Container for the Menu bar, consists of
+
     // The text area.
     private CustomTextArea textArea;
+
+    // Button to save data.
+    private Button saveButton;
 
     /**
      * Create a new GUI.
@@ -37,6 +46,7 @@ public class NotepadGUI implements ProgramFrontend {
         // Menu at the top.
         this.menuBar = new HBox();
         this.menuBar.setStyle(Constants.MENU_STYLE);
+//        this.menuBar.setStyle("-fx-background-color: red");
         this.menuBar.setPrefHeight(Constants.MENU_HEIGHT);
 
         // Separator.

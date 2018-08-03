@@ -1,3 +1,4 @@
 .separator:horizontal .line {
     -fx-border-color: rgb(191, 189, 189) transparent transparent transparent;
+    -fx-border-insets: 6 10 0 10;
 }

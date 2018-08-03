@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Launcher class that starts the program.
@@ -13,6 +14,7 @@ public class Launcher extends Application {
         NotepadGUI gui = new NotepadGUI();
         Scene scene = gui.getScene();
         primaryStage.setScene(scene);
+        primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.show();
     }
 }
