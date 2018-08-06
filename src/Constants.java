@@ -39,18 +39,14 @@ public class Constants {
 
     final public static int WINDOW_HEIGHT = 450;
 
-    // The style of the background.
-    final public static String BACKGROUND_STYLE = "-fx-background-color: #464646";
-//    final public static String BACKGROUND_STYLE = "-fx-background-color: red";
+    // The style sheet of the background.
+    final public static String BACKGROUND_STYLE_PATH = "backgroundstyle.css";
 
-    // The style for the top menu bar.
-    final public static String MENU_STYLE = "-fx-background-color: #3f3f3f";
+    // Style sheet for Menu.
+    final public static String MENU_STYLE_PATH = "menustyle.css";
 
     // The height of the menu.
-    final public static double MENU_HEIGHT = 50;
-
-    // Style sheet for menu Separator file path.
-    final public static String MENU_SEPARATOR_STYLE_PATH = "separatorstyle.css";
+    final public static double MENU_HEIGHT = 40;
 
     // Style sheet for Text Area file path.
     final public static String TEXTAREA_STYLE_PATH = "textareastyle.css";
@@ -61,4 +57,9 @@ public class Constants {
             "-fx-background-color: transparent, transparent, transparent, transparent; -fx-focus-color: transparent;" +
             "-fx-faint-focus-color: transparent; -fx-background-radius: 0; -fx-control-inner-background-radius: 0;";
 
+    // Style sheet for Button file path.
+    final public static String BUTTON_STYLE_PATH = "menubuttonstyle.css";
+
+    // Style sheet for the Button that displays the size of the font in the menu.
+    final public static String TEXT_SIZE_LABEL_STYLE_PATH = "textsizebuttonstyle.css";
 }
