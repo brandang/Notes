@@ -1,10 +1,11 @@
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 
 /**
  * The main GUI for the program.
@@ -39,6 +40,7 @@ public class NotepadGUI implements ProgramFrontend {
      */
     public NotepadGUI() {
         this.setup();
+        this.setupButtons();
     }
 
     /**
@@ -59,6 +61,11 @@ public class NotepadGUI implements ProgramFrontend {
         imageView.setFitHeight(15);
         this.saveButton.setGraphic(imageView);
 
+        // The separator in the menu.
+        Separator menuSeparator = new Separator();
+        menuSeparator.setOrientation(Orientation.VERTICAL);
+        menuSeparator.getStylesheets().add(Constants.SEPARATOR_STYLE_PATH);
+
         // Text sizes buttons.
         this.decreaseFontButton = new Button("−");
         this.decreaseFontButton.getStylesheets().add(Constants.BUTTON_STYLE_PATH);
@@ -74,16 +81,43 @@ public class NotepadGUI implements ProgramFrontend {
         this.menuBar.getStyleClass().add("hbox");
         this.menuBar.setPrefHeight(Constants.MENU_HEIGHT);
         this.menuBar.getChildren().addAll(this.decreaseFontButton, this.textSizeButton, this.increaseFontButton,
-                this.saveButton);
+                menuSeparator, this.saveButton);
         this.menuBar.setAlignment(Pos.CENTER_RIGHT);
 
         // The text area.
-//        this.textArea = new CustomTextArea("Testing 123");
         this.textArea = new CustomTextArea("Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123");
 
         // Add components to GUI.
         this.background.setTop(this.menuBar);
         this.background.setCenter(this.textArea);
+    }
+
+    /**
+     * Adds appropriate listeners to Buttons.
+     */
+    private void setupButtons() {
+
+        // Save button pressed.
+        this.saveButton.setOnAction(event -> {
+
+        });
+
+        // Increase text size.
+        this.increaseFontButton.setOnAction(event -> {
+            this.textArea.setFontSize(this.textArea.getFontSize() + 1);
+            this.textSizeButton.setText(Double.toString(this.textArea.getFontSize()));
+        });
+
+        // Decrease text size.
+        this.decreaseFontButton.setOnAction(event -> {
+            this.textArea.setFontSize(this.textArea.getFontSize() - 1);
+            this.textSizeButton.setText(Double.toString(this.textArea.getFontSize()));
+        });
+    }
+
+    @Override
+    public void setBackend(ProgramBackend backend) {
+
     }
 
     @Override

@@ -1,12 +1,16 @@
+
 import java.io.IOException;
 
 /**
  * Controller for Notepad and the GUI.
  */
-public class NotepadController {
+public class NotepadController implements ProgramBackend {
 
     // Class that can upload and download data from Drive.
     private AppData appData;
+
+    // The Frontend that we must interact with.
+    private ProgramFrontend frontend;
 
     /**
      * Creates a NotepadController.
@@ -37,4 +41,18 @@ public class NotepadController {
         this.appData.uploadData(data);
     }
 
+    @Override
+    public void setFrontend(ProgramFrontend frontend) {
+        this.frontend = frontend;
+    }
+
+    @Override
+    public void clearButtonPressed() {
+
+    }
+
+    @Override
+    public void closeButtonPressed() {
+
+    }
 }

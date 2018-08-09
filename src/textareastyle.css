@@ -37,21 +37,23 @@ Colour when text is highlighted.
 .text-area .scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-border-color:transparent;
+    -fx-pref-width: 20;
+    -fx-max-width: 20;
 }
 .text-area .scroll-bar:vertical .thumb {
     -fx-background-color: #BFBDBD;
     -fx-background-insets: 0 6 0 6;
-    -fx-background-radius: 1em;
+    /*-fx-background-radius: 1em;*/
 }
 .text-area .scroll-bar:vertical .thumb:hover {
     -fx-background-color: #BFBDBD;
     -fx-background-insets: 0 6 0 6;
-    -fx-background-radius: 1em;
+    /*-fx-background-radius: 1em;*/
 }
 .text-area .scroll-bar:vertical .thumb:pressed {
     -fx-background-color: #7F7F7F;
     -fx-background-insets: 0 6 0 6;
-    -fx-background-radius: 1em;
+    /*-fx-background-radius: 1em;*/
 }
 /*
 Disable up and down buttons for ScrollBar.

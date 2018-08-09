@@ -6,6 +6,12 @@ import javafx.scene.Scene;
 public interface ProgramFrontend extends AbstractFrontend {
 
     /**
+     * Set the Backend that this Frontend must communicate with.
+     * @param backend The Backend.
+     */
+    void setBackend(ProgramBackend backend);
+
+    /**
      * Returns the Scene that this Front-End represents.
      * @return The Scene object.
      */

@@ -12,6 +12,9 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle(Constants.WINDOW_TITLE);
         NotepadGUI gui = new NotepadGUI();
+        NotepadController controller = new NotepadController();
+        controller.setFrontend(gui);
+        gui.setBackend(controller);
         Scene scene = gui.getScene();
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.DECORATED);

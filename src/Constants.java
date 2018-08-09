@@ -1,3 +1,4 @@
+import javafx.scene.text.Font;
 
 /**
  * A class that stores constants for the program.
@@ -57,9 +58,18 @@ public class Constants {
             "-fx-background-color: transparent, transparent, transparent, transparent; -fx-focus-color: transparent;" +
             "-fx-faint-focus-color: transparent; -fx-background-radius: 0; -fx-control-inner-background-radius: 0;";
 
+    // Default font size of this JavaFx release.
+    final public static double DEFAULT_FONT_SIZE = Font.getDefault().getSize();
+
+    // Default font family.
+    final public static String DEFAULT_FONT_FAMILY = "Consolas";
+
     // Style sheet for Button file path.
     final public static String BUTTON_STYLE_PATH = "menubuttonstyle.css";
 
     // Style sheet for the Button that displays the size of the font in the menu.
     final public static String TEXT_SIZE_LABEL_STYLE_PATH = "textsizebuttonstyle.css";
+
+    // Style sheet for menu separator.
+    final public static String SEPARATOR_STYLE_PATH = "separatorstyle.css";
 }
