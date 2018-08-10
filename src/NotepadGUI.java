@@ -12,13 +12,14 @@ import javafx.scene.layout.*;
  */
 public class NotepadGUI implements ProgramFrontend {
 
+    // The Backend that this GUI represents.
+    private ProgramBackend backend;
+
     // The background of the GUI.
     private BorderPane background;
 
     // Menu bar.
     private HBox menuBar;
-
-    // Container for the Menu bar, consists of
 
     // The text area.
     private CustomTextArea textArea;
@@ -99,7 +100,7 @@ public class NotepadGUI implements ProgramFrontend {
 
         // Save button pressed.
         this.saveButton.setOnAction(event -> {
-
+            this.backend.saveButtonPressed();
         });
 
         // Increase text size.
@@ -117,7 +118,7 @@ public class NotepadGUI implements ProgramFrontend {
 
     @Override
     public void setBackend(ProgramBackend backend) {
-
+        this.backend = backend;
     }
 
     @Override
@@ -126,7 +127,12 @@ public class NotepadGUI implements ProgramFrontend {
     }
 
     @Override
-    public void setBackend(AbstractBackend backend) {
+    public String getText() {
+        return this.textArea.getText();
+    }
 
+    @Override
+    public int getTextFontSize() {
+        return (int) this.textArea.getFontSize();
     }
 }

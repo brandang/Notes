@@ -20,4 +20,9 @@ public interface ProgramBackend {
      */
     void closeButtonPressed();
 
+    /**
+     * User has clicked on the 'Save' button.
+     */
+    void saveButtonPressed();
+
 }

@@ -37,8 +37,8 @@ public class NotepadController implements ProgramBackend {
      * Attempt to save data on to Google Drive.
      * @param data The data to save.
      */
-    public void saveData(String data) {
-        this.appData.uploadData(data);
+    private void saveData(SaveData data) {
+        this.appData.uploadData(data.getSaveData());
     }
 
     @Override
@@ -54,5 +54,16 @@ public class NotepadController implements ProgramBackend {
     @Override
     public void closeButtonPressed() {
 
+    }
+
+    @Override
+    public void saveButtonPressed() {
+
+        // Sign in to Google was successful.
+        if (this.signIn()) {
+            // Encapsulate the Save Data.
+            SaveData data = new SaveData(this.frontend.getText(), this.frontend.getTextFontSize());
+            this.saveData(data);
+        }
     }
 }
