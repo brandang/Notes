@@ -1,5 +1,6 @@
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Font;
 
 /**
  * A custom TextArea with a customized look and feel.
@@ -11,6 +12,12 @@ public class CustomTextArea extends TextArea {
 
     // The font family for the text.
     private String fontFamily;
+
+    // The minimum text size.
+    final private int MIN_TEXT_SIZE = 4;
+
+    // The maximum text size.
+    final private int MAX_TEXT_SIZE = 24;
 
     /**
      * Creates a CustomTextArea with no initial content.
@@ -55,17 +62,19 @@ public class CustomTextArea extends TextArea {
         // to, say, 14px, this changes the value of 'em', thereby changing everything else in the TextArea.
         // To remedy this, set Font size based on 'em'. If em == 12, then 24 == 2em, and 18 == 1.5em, etc.
         this.styleProperty().bind(Bindings.concat("-fx-font-size: ", this.fontSize /
-                Constants.DEFAULT_FONT_SIZE, "em;" + "-fx-text-fill: #d6d6d6;" + "-fx-font-family: " +
+                Font.getDefault().getSize(), "em;" + "-fx-text-fill: #d6d6d6;" + "-fx-font-family: " +
                 this.fontFamily));
     }
 
     /**
-     * Set the new size of the font.
+     * Set the new size of the font, if it is valid.
      * @param size The size.
      */
     public void setFontSize(double size) {
-        this.fontSize = size;
-        this.updateFont();
+        if (size >= this.MIN_TEXT_SIZE && size <= this.MAX_TEXT_SIZE) {
+            this.fontSize = size;
+            this.updateFont();
+        }
     }
 
     /**

@@ -71,7 +71,7 @@ public class NotepadGUI implements ProgramFrontend {
         this.decreaseFontButton.getStylesheets().add(Constants.BUTTON_STYLE_PATH);
         this.increaseFontButton = new Button("+");
         this.increaseFontButton.getStylesheets().add(Constants.BUTTON_STYLE_PATH);
-        this.textSizeButton = new Button("12");
+        this.textSizeButton = new Button(Integer.toString((int)Constants.DEFAULT_FONT_SIZE));
         this.textSizeButton.getStylesheets().add(Constants.TEXT_SIZE_LABEL_STYLE_PATH);
 
         // Menu at the top.
@@ -105,13 +105,13 @@ public class NotepadGUI implements ProgramFrontend {
         // Increase text size.
         this.increaseFontButton.setOnAction(event -> {
             this.textArea.setFontSize(this.textArea.getFontSize() + 1);
-            this.textSizeButton.setText(Double.toString(this.textArea.getFontSize()));
+            this.textSizeButton.setText(Integer.toString((int)this.textArea.getFontSize()));
         });
 
         // Decrease text size.
         this.decreaseFontButton.setOnAction(event -> {
             this.textArea.setFontSize(this.textArea.getFontSize() - 1);
-            this.textSizeButton.setText(Double.toString(this.textArea.getFontSize()));
+            this.textSizeButton.setText(Integer.toString((int)this.textArea.getFontSize()));
         });
     }
 
