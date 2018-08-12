@@ -20,15 +20,21 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collections;
 
+/*
+403 error: insufficient permissions. perhaps because need to datastorefactory to have physical file on computer.
+ */
+
 /**
+ *
  * Class that is responsible for uploading and downloading the program data from Google Drive`s appdatafolder.
  * Also contains many methods to manage files stored in the appdatafolder.
  */
 public class AppData {
 
-    // Drive API client.
+    // The Drive in which to extract and save data to.
     private Drive drive;
 
     // JSON Factory used to load client secrets.
@@ -67,7 +73,8 @@ public class AppData {
 
     /**
      * Ask the user permission to access the appdatafolder on Google Drive. Must call this method before using
-     * AppData class.
+     * AppData class. However, only have to do this once when the program runs. After the first call, it signs in
+     * automatically without need for user input.
      */
     public void acquireCredentials() throws IOException {
         // Load client secrets from Constants.
@@ -76,14 +83,19 @@ public class AppData {
 
         // Set up authorization code flow.
         GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(
-            httpTransport, this.jsonFactory, clientSecrets,
+            this.httpTransport, this.jsonFactory, clientSecrets,
             // Access scopes, where to store credentials, and whether to always ask user for permissions.
-            Collections.singleton(DriveScopes.DRIVE_APPDATA));
+                Arrays.asList(DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE));
         builder.setDataStoreFactory(dataStoreFactory).setApprovalPrompt("force");
         GoogleAuthorizationCodeFlow flow = builder.build();
 
         // Authorize and get credentials.
         this.credentials = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+
+        // Get the Drive to use to save and extract data.
+        this.drive = new Drive.Builder(this.httpTransport, this.jsonFactory, this.credentials).setApplicationName(
+                Constants.WINDOW_TITLE).build();
+
     }
 
     /**
@@ -241,6 +253,8 @@ public class AppData {
 
         // Start uploading.
         update.execute();
+
+        System.out.println("Updated file");
     }
 
     /**
@@ -251,6 +265,10 @@ public class AppData {
         // Create Google Drive file.
         File fileMetadata = new File();
         fileMetadata.setTitle(Constants.SAVE_FILE_NAME);
+        // Where to place the file.
+        ParentReference pr = new ParentReference();
+        pr.setId(Constants.APPDATAFOLDER);
+        fileMetadata.setParents(Collections.singletonList(pr));
 
         // Store data in memory.
         ByteArrayContent content = new ByteArrayContent(Constants.SAVE_FILE_TYPE, data.getBytes());
@@ -262,8 +280,68 @@ public class AppData {
 
         // Set whether or not to upload entire thing at once, or in chunks.
         uploader.setDirectUploadEnabled(Constants.USE_DIRECT_UPLOAD);
+
         // Start uploading.
         insert.execute();
+
+        System.out.println("Created file.");
+    }
+
+    /*******
+    Methods used for debugging program.
+     ******/
+
+    /**
+     * Deletes all of the files in the appDataFolder. Throws Exception if Credentials are invalid.
+     */
+    public void deleteFiles() {
+        System.out.println("Before: ");
+        this.printFileNames();
+
+        try {
+            // File searcher.
+            Drive.Files.List fileSearch = drive.files().list();
+            // Where to search.
+            fileSearch.setSpaces("appDataFolder");
+            // Start search.
+            FileList files = fileSearch.execute();
+
+            // Delete all files.
+            for (File file : files.getItems()) {
+                Drive.Files.Delete deleter = drive.files().delete(file.getId());
+                deleter.execute();
+            }
+            System.out.println("After: ");
+            this.printFileNames();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CredentialInvalidException();
+        }
+    }
+
+    /**
+     * Prints all of names of the files in the appDataFolder. Throws Exception if Credentials are invalid.
+     */
+    public void printFileNames() {
+        System.out.println("Files:");
+
+        // File searcher.
+        Drive.Files.List fileSearch;
+        try {
+            fileSearch = drive.files().list();
+            // Where to search.
+            fileSearch.setSpaces(Constants.APPDATAFOLDER);
+            // Start search.
+            FileList files = fileSearch.execute();
+
+            // Look for the right file and return it.
+            for (File file : files.getItems()) {
+                System.out.println(file.getTitle());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CredentialInvalidException();
+        }
     }
 
     /**

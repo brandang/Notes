@@ -18,15 +18,10 @@ public class Constants {
     final public static String SAVE_FILE_TYPE = "text/txt";
 
     // AppDataFolder Scope.
-    final public static String APPDATAFOLDER = "appdatafolder";
+    final public static String APPDATAFOLDER = "appDataFolder";
 
     // Client Secrets data.
-    final public static String CLIENT_SECRETS = "\"{\\\"installed\\\":{\\\"client_id\\\":\\\"579441411049-3bqkmmem" +
-            "0ds4ek3r4ob55nciet7bdt7b.apps.googleusercontent.com\\\",\\\"project_id\\\":\\\"application-data-test\\\"" +
-            ",\\\"auth_uri\\\":\\\"https://accounts.google.com/o/oauth2/auth\\\",\\\"token_uri\\\":\\\"https://ac" +
-            "counts.google.com/o/oauth2/token\\\",\\\"auth_provider_x509_cert_url\\\":\\\"https://www.googleapis.com/" +
-            "oauth2/v1/certs\\\",\\\"client_secret\\\":\\\"Pyq2ArAEO4hqcnraEVbh6fia\\\",\\\"redirect_uris\\\":[\\\"u" +
-            "rn:ietf:wg:oauth:2.0:oob\\\",\\\"http://localhost\\\"]}}";
+    final public static String CLIENT_SECRETS = "{\"installed\":{\"client_id\":\"106704107629-38oibll0mfbrkgn9bgpbrnnkoto5qnvs.apps.googleusercontent.com\",\"project_id\":\"notes-209301\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://accounts.google.com/o/oauth2/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\",\"client_secret\":\"tMzx-z1Sm8vaM8WkWWWt_8zy\",\"redirect_uris\":[\"urn:ietf:wg:oauth:2.0:oob\",\"http://localhost\"]}}";
 
     // Whether or not to upload data in chunks.
     final public static boolean USE_DIRECT_UPLOAD = true;
