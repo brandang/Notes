@@ -19,5 +19,7 @@ public class Launcher extends Application {
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.show();
+
+        controller.loadData();
     }
 }

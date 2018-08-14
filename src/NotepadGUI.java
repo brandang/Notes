@@ -127,8 +127,19 @@ public class NotepadGUI implements ProgramFrontend {
     }
 
     @Override
+    public void setText(String text) {
+        this.textArea.setText(text);
+    }
+
+    @Override
     public String getText() {
         return this.textArea.getText();
+    }
+
+    @Override
+    public void setTextFontSize(int size) {
+        this.textArea.setFontSize(size);
+        this.textSizeButton.setText(Integer.toString((int)this.textArea.getFontSize()));
     }
 
     @Override

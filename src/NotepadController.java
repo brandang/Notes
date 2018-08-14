@@ -34,6 +34,22 @@ public class NotepadController implements ProgramBackend {
     }
 
     /**
+     * Loads the save data from Google Drive and put it on the GUI.
+     */
+    public void loadData() {
+        // Sign in successful.
+        if (this.signIn()) {
+            // Get the Save Data. Unpackage using SaveData class.
+            SaveData saveData = new SaveData(this.appData.downloadData());
+            int fontSize = saveData.getFontSize();
+            String text = saveData.getText();
+            // Update GUI.
+            this.frontend.setTextFontSize(fontSize);
+            this.frontend.setText(text);
+        }
+    }
+
+    /**
      * Attempt to save data on to Google Drive.
      * @param data The data to save.
      */

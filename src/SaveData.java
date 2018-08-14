@@ -54,8 +54,8 @@ public class SaveData {
      * @return The size of the font.
      */
     public int getFontSize() {
-        int digits = Integer.valueOf(this.data.charAt(0));
-        return Integer.valueOf(this.data.substring(1, digits + 1));
+        int digits = Integer.parseInt(this.data.substring(0, 1));
+        return Integer.parseInt(this.data.substring(1, digits + 1));
     }
 
     /**
@@ -63,7 +63,7 @@ public class SaveData {
      * @return The text.
      */
     public String getText() {
-        int digits = Integer.valueOf(this.data.charAt(0));
+        int digits = Integer.parseInt(this.data.substring(0, 1));
         return this.data.substring(digits + 1);
     }
 }

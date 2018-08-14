@@ -11,6 +11,7 @@ public interface ProgramFrontend {
      */
     void setBackend(ProgramBackend backend);
 
+
     /**
      * Returns the Scene that this Front-End represents.
      * @return The Scene object.
@@ -18,10 +19,22 @@ public interface ProgramFrontend {
     Scene getScene();
 
     /**
+     * Sets the text to display in the TextArea.
+     * @param text The text.
+     */
+    void setText(String text);
+
+    /**
      * Returns the String text that the user typed into the TextArea.
      * @return The text.
      */
     String getText();
+
+    /**
+     * Sets the size of the text for the TextArea.
+     * @param size The new font size.
+     */
+    void setTextFontSize(int size);
 
     /**
      * Returns the size of the font of the TextArea.
