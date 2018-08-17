@@ -67,4 +67,22 @@ public class Constants {
 
     // Style sheet for menu separator.
     final public static String SEPARATOR_STYLE_PATH = "separatorstyle.css";
+
+    // Style sheet for message pop up.
+    final public static String INFO_POPUP_STYLE_PATH = "infopopupstyle.css";
+
+    // The height of the message popup.
+    final public static double POPUP_HEIGHT = 30;
+
+    // The time that it takes for the animation of the popup to complete.
+    final public static double POPUP_ANIMATION_TIME = 500;
+
+    // How long to show the popup before hiding it again.
+    final public static double POPUP_SHOW_TIME = 2500;
+
+    // Message to show when loaded data.
+    final public static String LOADED_DATA_MSG = "Loaded data";
+
+    // Message to show when save successful.
+    final public static String SAVED_DATA_MSG = "Save successful";
 }

@@ -42,4 +42,9 @@ public interface ProgramFrontend {
      */
     int getTextFontSize();
 
+    /**
+     * Display message on screen.
+     */
+    void sendMessage(String message);
+
 }

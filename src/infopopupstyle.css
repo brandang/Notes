@@ -1,0 +1,7 @@
+.label {
+    -fx-background-color: #363636;
+    -fx-text-fill: #d6d6d6;
+    -fx-pref-height: 30;
+    /* Cant use -fx-text-alignment because it only centers multiline text. */
+    -fx-alignment: center;
+}

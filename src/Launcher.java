@@ -15,11 +15,20 @@ public class Launcher extends Application {
         NotepadController controller = new NotepadController();
         controller.setFrontend(gui);
         gui.setBackend(controller);
+
         Scene scene = gui.getScene();
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.DECORATED);
-        primaryStage.show();
 
+        // Load Save Data. Do this in another thread, so that the GUI has time to build.
+//        Platform.runLater(() -> controller.loadData());
+
+        // Load data before showing GUI.
         controller.loadData();
+        primaryStage.show();
+        // Bring Window to front. Second line prevents this Window from always being at front when using other apps.
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setAlwaysOnTop(false);
+
     }
 }

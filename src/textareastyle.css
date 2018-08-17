@@ -73,6 +73,7 @@ Context menu; accessed via right click.
  */
 .context-menu {
     -fx-background-color: #555555;
+    -fx-font-size: 12px;
 }
 .menu-item .label {
     -fx-text-fill: #d6d6d6;

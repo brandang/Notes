@@ -46,6 +46,7 @@ public class NotepadController implements ProgramBackend {
             // Update GUI.
             this.frontend.setTextFontSize(fontSize);
             this.frontend.setText(text);
+            this.frontend.sendMessage(Constants.LOADED_DATA_MSG);
         }
     }
 
@@ -79,7 +80,9 @@ public class NotepadController implements ProgramBackend {
         if (this.signIn()) {
             // Encapsulate the Save Data.
             SaveData data = new SaveData(this.frontend.getText(), this.frontend.getTextFontSize());
+            // Save data and send message when complete.
             this.saveData(data);
+            this.frontend.sendMessage(Constants.SAVED_DATA_MSG);
         }
     }
 }

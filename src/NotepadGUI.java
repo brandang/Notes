@@ -1,11 +1,17 @@
+import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 /**
  * The main GUI for the program.
@@ -35,6 +41,9 @@ public class NotepadGUI implements ProgramFrontend {
 
     // Button that acts as a label to indicate text size.
     private Button textSizeButton;
+
+    // Label to display messages.
+    private Label infoPopup;
 
     /**
      * Create a new GUI.
@@ -90,7 +99,22 @@ public class NotepadGUI implements ProgramFrontend {
 
         // Add components to GUI.
         this.background.setTop(this.menuBar);
-        this.background.setCenter(this.textArea);
+
+        // The message box at the bottom.
+        this.infoPopup = new Label("Testing");
+        // Make sure it expands all the way.
+        this.infoPopup.setMaxWidth(Double.MAX_VALUE);
+        this.infoPopup.setPrefHeight(Constants.POPUP_HEIGHT);
+        this.infoPopup.getStylesheets().add(Constants.INFO_POPUP_STYLE_PATH);
+
+        // StackPane allows us to overlay message over TextArea.
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(this.textArea, this.infoPopup);
+        this.background.setCenter(stackPane);
+        // Set alignment of the popup.
+        StackPane.setAlignment(this.infoPopup, Pos.BOTTOM_CENTER);
+        // Make sure it initially does not appear on screen.
+        this.infoPopup.setTranslateY(Constants.POPUP_HEIGHT);
     }
 
     /**
@@ -114,6 +138,88 @@ public class NotepadGUI implements ProgramFrontend {
             this.textArea.setFontSize(this.textArea.getFontSize() - 1);
             this.textSizeButton.setText(Integer.toString((int)this.textArea.getFontSize()));
         });
+    }
+
+    /**
+     * Creates and returns Animation for showing popup.
+     * @param message The message to display.
+     * @return The Animation.
+     */
+    private Animation showAnimation(String message) {
+        // Prepare animation.
+        Animation expandPopup = new Transition() {
+            {
+                setCycleDuration(Duration.millis(Constants.POPUP_ANIMATION_TIME));
+            }
+
+            @Override
+            protected void interpolate(double fraction) {
+                NotepadGUI.this.infoPopup.setTranslateY((Constants.POPUP_HEIGHT * (-fraction)) + Constants.POPUP_HEIGHT);
+            }
+        };
+
+        // Set message.
+        NotepadGUI.this.infoPopup.setText(message);
+        return expandPopup;
+    }
+
+    /**
+     * Creates and returns Animation where popup stays and does nothing for a set amount of time.
+     * @param waitTime How long in milliseconds to wait.
+     * @return
+     */
+    private Animation waitAnimation(double waitTime) {
+        // Prepare animation.
+        Animation wait = new Transition() {
+            {
+                setCycleDuration(Duration.millis(waitTime));
+            }
+
+            @Override
+            protected void interpolate(double fraction) {
+                // Don't do anything; just a placeholder.
+            }
+        };
+        return wait;
+    }
+
+    /**
+     * Creates and returns an Animation where the popup disappears.
+     * @return The Animation.
+     */
+    private Animation hideAnimation() {
+        // Prepare animation.
+        Animation closePopup = new Transition() {
+            {
+                setCycleDuration(Duration.millis(Constants.POPUP_ANIMATION_TIME));
+            }
+
+            @Override
+            protected void interpolate(double fraction) {
+                NotepadGUI.this.infoPopup.setTranslateY((Constants.POPUP_HEIGHT * (fraction)));
+            }
+        };
+
+        return closePopup;
+    }
+
+
+    /**
+     * Display a message on the InfoPopup.
+     * @param message The message.
+     */
+    private void showMessage(String message) {
+        Animation show = this.showAnimation(message);
+        Animation wait = this.waitAnimation(Constants.POPUP_SHOW_TIME);
+        Animation hide = this.hideAnimation();
+        show.setOnFinished(event -> wait.play());
+        wait.setOnFinished(event -> hide.play());
+        show.play();
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        this.showMessage(message);
     }
 
     @Override
@@ -146,4 +252,6 @@ public class NotepadGUI implements ProgramFrontend {
     public int getTextFontSize() {
         return (int) this.textArea.getFontSize();
     }
+
+
 }
