@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -19,6 +20,7 @@ public class Launcher extends Application {
         Scene scene = gui.getScene();
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.getIcons().add(new Image(Constants.APP_ICON_PATH));
 
         // Load Save Data. Do this in another thread, so that the GUI has time to build.
 //        Platform.runLater(() -> controller.loadData());

@@ -65,7 +65,7 @@ public class NotepadGUI implements ProgramFrontend {
         // The save button.
         this.saveButton = new Button();
         this.saveButton.getStylesheets().add(Constants.BUTTON_STYLE_PATH);
-        Image saveImage = new Image(getClass().getResourceAsStream("savebutton.png"));
+        Image saveImage = new Image(getClass().getResourceAsStream(Constants.SAVE_ICON_PATH));
         ImageView imageView = new ImageView(saveImage);
         imageView.setFitWidth(15);
         imageView.setFitHeight(15);
@@ -252,6 +252,4 @@ public class NotepadGUI implements ProgramFrontend {
     public int getTextFontSize() {
         return (int) this.textArea.getFontSize();
     }
-
-
 }

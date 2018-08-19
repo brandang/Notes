@@ -26,6 +26,12 @@ public class Constants {
     // Whether or not to upload data in chunks.
     final public static boolean USE_DIRECT_UPLOAD = true;
 
+    // Path for save button icon.
+    final public static String SAVE_ICON_PATH = "savebutton.png";
+
+    // Path for application's icon.
+    final public static String APP_ICON_PATH = "icon.png";
+
     // Message to display for Exception.
     final public static String CREDENTIAL_EXCEPTION_MSG = "Cannot access Google Drive. Credential either invalid " +
             "or permission not attained yet.";
