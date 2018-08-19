@@ -62,8 +62,9 @@ public class AppData {
 
         try {
             this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-            // Store Credential data in memory.
-            this.dataStoreFactory = new MemoryDataStoreFactory();
+            // Store Credential data in a file.
+//            this.dataStoreFactory = new MemoryDataStoreFactory();
+            this.dataStoreFactory = new FileDataStoreFactory(new java.io.File(Constants.CREDENTIAL_SAVE_PATH));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (Throwable t) {

@@ -20,6 +20,9 @@ public class Constants {
     // AppDataFolder Scope.
     final public static String APPDATAFOLDER = "appDataFolder";
 
+    // Where to save Credentials data.
+    final public static String CREDENTIAL_SAVE_PATH = "save_data";
+
     // Client Secrets data.
     final public static String CLIENT_SECRETS = "{\"installed\":{\"client_id\":\"106704107629-38oibll0mfbrkgn9bgpbrnnkoto5qnvs.apps.googleusercontent.com\",\"project_id\":\"notes-209301\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://accounts.google.com/o/oauth2/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\",\"client_secret\":\"tMzx-z1Sm8vaM8WkWWWt_8zy\",\"redirect_uris\":[\"urn:ietf:wg:oauth:2.0:oob\",\"http://localhost\"]}}";
 
