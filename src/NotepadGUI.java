@@ -1,7 +1,5 @@
 import javafx.animation.Animation;
 import javafx.animation.Transition;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
