@@ -277,6 +277,28 @@ public class NotepadGUI implements ProgramFrontend {
         show.play();
     }
 
+    /**
+     * Binds the key shortcuts.
+     * @param scene The scene to bind to.
+     */
+    private void initKeyShortcuts(Scene scene) {
+        // Bind the CTRL-S shortcut.
+        KeyCombination save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            if (save.match(e)) {
+                this.saveData();
+            }
+        });
+
+        // Bind CTRL-R shortcut.
+        KeyCombination reload = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            if (reload.match(e)) {
+                this.syncData();
+            }
+        });
+    }
+
     @Override
     public void sendMessage(String message) {
         this.showMessage(message);
@@ -290,14 +312,7 @@ public class NotepadGUI implements ProgramFrontend {
     @Override
     public Scene getScene() {
         Scene scene = new Scene(this.background, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
-        // Bind the CTRL-S shortcut.
-        KeyCombination comb = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-        scene.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
-            if (comb.match(e)) {
-                System.out.println("Ctrl+S pressed");
-                this.saveData();
-            }
-        });
+        this.initKeyShortcuts(scene);
         return scene;
     }
 
