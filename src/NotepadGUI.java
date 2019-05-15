@@ -1,5 +1,7 @@
 import javafx.animation.Animation;
 import javafx.animation.Transition;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,6 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -17,6 +23,11 @@ import javafx.util.Duration;
  * The main GUI for the program.
  */
 public class NotepadGUI implements ProgramFrontend {
+
+    // Messages to display in loading screens.
+    final private static String LOADING_DATA_MESSAGE = "Loading Data...";
+
+    final private static String SAVING_DATA_MESSAGE = "Saving Data...";
 
     // The Backend that this GUI represents.
     private ProgramBackend backend;
@@ -33,6 +44,9 @@ public class NotepadGUI implements ProgramFrontend {
     // Button to save data.
     private Button saveButton;
 
+    // Button to resync data.
+    private Button syncButton;
+
     // Button to decrease font size.
     private Button decreaseFontButton;
 
@@ -45,12 +59,18 @@ public class NotepadGUI implements ProgramFrontend {
     // Label to display messages.
     private Label infoPopup;
 
+    // The main content area consisting of the textArea and the info popup, as well as the menu.
+    private BorderPane mainPane;
+
     /**
      * Create a new GUI.
      */
     public NotepadGUI() {
         this.setup();
-        this.setupButtons();
+        // Initially display loading screen.
+        LoadingPane loadPane = new LoadingPane(this.LOADING_DATA_MESSAGE);
+        this.background.setCenter(loadPane);
+        this.bindButtons();
     }
 
     /**
@@ -58,18 +78,57 @@ public class NotepadGUI implements ProgramFrontend {
      */
     private void setup() {
         this.background = new BorderPane();
-        this.background.getStylesheets().add(Constants.BACKGROUND_STYLE_PATH);
+        this.mainPane = new BorderPane();
+        this.mainPane.getStylesheets().add(Constants.BACKGROUND_STYLE_PATH);
         // Need to do this since BorderPane does not have Control as an ancestor.
-        this.background.getStyleClass().add("borderpane");
+        this.mainPane.getStyleClass().add("borderpane");
 
+        this.setupButtons();
+
+        // The text area.
+        this.textArea = new CustomTextArea("");
+        // Add components to GUI.
+        this.mainPane.setTop(this.menuBar);
+
+        // The message box at the bottom.
+        this.infoPopup = new Label("Testing");
+        // Make sure it expands all the way.
+        this.infoPopup.setMaxWidth(Double.MAX_VALUE);
+        this.infoPopup.setPrefHeight(Constants.POPUP_HEIGHT);
+        this.infoPopup.getStylesheets().add(Constants.INFO_POPUP_STYLE_PATH);
+
+        // StackPane allows us to overlay message over TextArea.
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(this.textArea, this.infoPopup);
+        this.mainPane.setCenter(stackPane);
+
+        // Set alignment of the popup.
+        StackPane.setAlignment(this.infoPopup, Pos.BOTTOM_CENTER);
+        // Make sure it initially does not appear on screen.
+        this.infoPopup.setTranslateY(Constants.POPUP_HEIGHT);
+    }
+
+    /**
+     * Sets up the look and feel of the buttons. Must be called before the buttons are added to the pane.
+     */
+    private void setupButtons() {
         // The save button.
         this.saveButton = new Button();
         this.saveButton.getStylesheets().add(Constants.BUTTON_STYLE_PATH);
         Image saveImage = new Image(getClass().getResourceAsStream(Constants.SAVE_ICON_PATH));
-        ImageView imageView = new ImageView(saveImage);
-        imageView.setFitWidth(15);
-        imageView.setFitHeight(15);
-        this.saveButton.setGraphic(imageView);
+        ImageView saveView = new ImageView(saveImage);
+        saveView.setFitWidth(15);
+        saveView.setFitHeight(15);
+        this.saveButton.setGraphic(saveView);
+
+        // The sync button.
+        this.syncButton = new Button();
+        this.syncButton.getStylesheets().add(Constants.BUTTON_STYLE_PATH);
+        Image syncImage = new Image(getClass().getResourceAsStream(Constants.SYNC_ICON_PATH));
+        ImageView syncView = new ImageView(syncImage);
+        syncView.setFitWidth(15);
+        syncView.setFitHeight(15);
+        syncButton.setGraphic(syncView);
 
         // The separator in the menu.
         Separator menuSeparator = new Separator();
@@ -91,41 +150,20 @@ public class NotepadGUI implements ProgramFrontend {
         this.menuBar.getStyleClass().add("hbox");
         this.menuBar.setPrefHeight(Constants.MENU_HEIGHT);
         this.menuBar.getChildren().addAll(this.decreaseFontButton, this.textSizeButton, this.increaseFontButton,
-                menuSeparator, this.saveButton);
+                menuSeparator, this.saveButton, this.syncButton);
         this.menuBar.setAlignment(Pos.CENTER_RIGHT);
-
-        // The text area.
-        this.textArea = new CustomTextArea("Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123Testing 123");
-
-        // Add components to GUI.
-        this.background.setTop(this.menuBar);
-
-        // The message box at the bottom.
-        this.infoPopup = new Label("Testing");
-        // Make sure it expands all the way.
-        this.infoPopup.setMaxWidth(Double.MAX_VALUE);
-        this.infoPopup.setPrefHeight(Constants.POPUP_HEIGHT);
-        this.infoPopup.getStylesheets().add(Constants.INFO_POPUP_STYLE_PATH);
-
-        // StackPane allows us to overlay message over TextArea.
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(this.textArea, this.infoPopup);
-        this.background.setCenter(stackPane);
-        // Set alignment of the popup.
-        StackPane.setAlignment(this.infoPopup, Pos.BOTTOM_CENTER);
-        // Make sure it initially does not appear on screen.
-        this.infoPopup.setTranslateY(Constants.POPUP_HEIGHT);
     }
 
     /**
      * Adds appropriate listeners to Buttons.
      */
-    private void setupButtons() {
+    private void bindButtons() {
 
         // Save button pressed.
-        this.saveButton.setOnAction(event -> {
-            this.backend.saveButtonPressed();
-        });
+        this.saveButton.setOnAction(event -> this.saveData());
+
+        // Resync.
+        this.syncButton.setOnAction(event -> this.syncData());
 
         // Increase text size.
         this.increaseFontButton.setOnAction(event -> {
@@ -138,6 +176,29 @@ public class NotepadGUI implements ProgramFrontend {
             this.textArea.setFontSize(this.textArea.getFontSize() - 1);
             this.textSizeButton.setText(Integer.toString((int)this.textArea.getFontSize()));
         });
+    }
+
+    /**
+     * Saves the data and show the loading screen on the GUI.
+     */
+    private void saveData() {
+        LoadingPane loadPane = new LoadingPane(this.SAVING_DATA_MESSAGE);
+        this.background.setCenter(loadPane);
+        this.backend.saveButtonPressed();
+    }
+
+    /**
+     * Syncs up the data and show the loading screen on the GUI.
+     */
+    private void syncData() {
+        LoadingPane loadingPane = new LoadingPane(this.LOADING_DATA_MESSAGE);
+        this.background.setCenter(loadingPane);
+        this.backend.syncButtonPressed();
+    }
+
+    @Override
+    public void finishLoading() {
+        this.background.setCenter(this.mainPane);
     }
 
     /**
@@ -229,7 +290,16 @@ public class NotepadGUI implements ProgramFrontend {
 
     @Override
     public Scene getScene() {
-        return new Scene(this.background, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        Scene scene = new Scene(this.background, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        // Bind the CTRL-S shortcut.
+        KeyCombination comb = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            if (comb.match(e)) {
+                System.out.println("Ctrl+S pressed");
+                this.saveData();
+            }
+        });
+        return scene;
     }
 
     @Override

@@ -25,4 +25,9 @@ public interface ProgramBackend {
      */
     void saveButtonPressed();
 
+    /**
+     * User clicked on the 'Resync' button.
+     */
+    void syncButtonPressed();
+
 }

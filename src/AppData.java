@@ -12,7 +12,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
@@ -30,9 +29,16 @@ import java.util.Collections;
 /**
  *
  * Class that is responsible for uploading and downloading the program data from Google Drive`s appdatafolder.
+ * Creates a connection.
  * Also contains many methods to manage files stored in the appdatafolder.
  */
 public class AppData {
+
+    public enum Results {
+        SUCCESS,
+        CANCELED,
+        FAILED
+    }
 
     // The Drive in which to extract and save data to.
     private Drive drive;
@@ -49,10 +55,16 @@ public class AppData {
     // Credentials to access user data.
     private Credential credentials;
 
+    // Only do one thing/task  at a time.
+    private boolean busy;
+
     /**
      * Creates a new AppData instance, which can be used to download and upload application data.
      */
     public AppData() {
+
+        // We are not busy yet.
+        this.busy = false;
 
         // Disable annoying warnings.
         final java.util.logging.Logger buggyLogger = java.util.logging.Logger.getLogger(FileDataStoreFactory.class.getName());
@@ -63,7 +75,7 @@ public class AppData {
         try {
             this.httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             // Store Credential data in a file.
-//            this.dataStoreFactory = new MemoryDataStoreFactory();
+            // this.dataStoreFactory = new MemoryDataStoreFactory();
             this.dataStoreFactory = new FileDataStoreFactory(new java.io.File(Constants.CREDENTIAL_SAVE_PATH));
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -96,7 +108,6 @@ public class AppData {
         // Get the Drive to use to save and extract data.
         this.drive = new Drive.Builder(this.httpTransport, this.jsonFactory, this.credentials).setApplicationName(
                 Constants.WINDOW_TITLE).build();
-
     }
 
     /**
@@ -121,11 +132,25 @@ public class AppData {
     }
 
     /**
+     * Sign in to Google Drive.
+     * @return Whether or not sign in was successful.
+     */
+    public boolean signIn() {
+        try {
+            this.acquireCredentials();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Returns the save file. Returns null if the file does not exist. Throws exception if there was an error accessing
      * the file.
      * @return The file.
      */
-    private File getSaveFile(){
+    private File getSaveFile() {
         // File searcher.
         Drive.Files.List fileSearch;
         try {
@@ -142,8 +167,9 @@ public class AppData {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new CredentialInvalidException();
+            System.out.println("returning1");
+//            e.printStackTrace();
+            return null;
         }
         return null;
     }
@@ -155,6 +181,7 @@ public class AppData {
     private String getSaveFileID() {
         File saveFile = this.getSaveFile();
         if (saveFile == null) {
+            System.out.println("returning2");
             return null;
         } else {
             return saveFile.getId();
@@ -168,6 +195,7 @@ public class AppData {
     private String getSaveFileURL() {
         File saveFile = this.getSaveFile();
         if (saveFile == null) {
+            System.out.println("returning3");
             return null;
         } else {
             return saveFile.getDownloadUrl();
@@ -218,8 +246,15 @@ public class AppData {
      * Uploads the app data. Overwrites the current data file, or creates a new one if it does not exist. Throws
      * exception if credentials are invalid.
      * @param data The data to upload.
+     * @return The Results: task was met with success, canceled, or failed.
      */
-    public void uploadData(String data) {
+    public Results uploadData(String data) {
+        if (this.busy) {
+            return Results.CANCELED;
+        } else {
+            this.busy = true;
+        }
+        System.out.println("Checking Credentials");
         this.checkCredentials();
         try {
             if (this.saveFileExists()) {
@@ -229,7 +264,10 @@ public class AppData {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return Results.FAILED;
         }
+        this.busy = false;
+        return Results.SUCCESS;
     }
 
     /**
@@ -249,6 +287,7 @@ public class AppData {
         String fileID = this.getSaveFileID();
 
         // Save data in memory and upload.
+        System.out.println("start");
         ByteArrayContent content = new ByteArrayContent(Constants.SAVE_FILE_TYPE, data.getBytes());
         Drive.Files.Update update = drive.files().update(fileID, fileMetadata, content);
 

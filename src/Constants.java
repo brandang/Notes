@@ -32,6 +32,9 @@ public class Constants {
     // Path for save button icon.
     final public static String SAVE_ICON_PATH = "savebutton.png";
 
+    // Path for the sync button icon.
+    final public static String SYNC_ICON_PATH = "sync.png";
+
     // Path for application's icon.
     final public static String APP_ICON_PATH = "icon.png";
 
@@ -92,6 +95,12 @@ public class Constants {
     // Message to show when loaded data.
     final public static String LOADED_DATA_MSG = "Loaded data";
 
+    // Message to show when unable to load data.
+    final public static String CANT_LOAD_DATA = "Error Loading Data, Check Internet Connection";
+
     // Message to show when save successful.
-    final public static String SAVED_DATA_MSG = "Save successful";
+    final public static String SAVED_DATA_MSG = "Save Successful";
+
+    // Message to show when saving was unsuccessful.
+    final public static String SAVE_DATA_FAILED_MSG = "Error Saving, Check Internet Connection";
 }

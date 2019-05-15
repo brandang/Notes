@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -22,12 +23,10 @@ public class Launcher extends Application {
         primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.getIcons().add(new Image(Constants.APP_ICON_PATH));
 
-        // Load Save Data. Do this in another thread, so that the GUI has time to build.
-//        Platform.runLater(() -> controller.loadData());
-
-        // Load data before showing GUI.
-        controller.loadData();
         primaryStage.show();
+        // Load Save Data. Do this in another thread, so that the GUI appears before data fully loads.
+        controller.loadData();
+
         // Bring Window to front. Second line prevents this Window from always being at front when using other apps.
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setAlwaysOnTop(false);

@@ -33,6 +33,17 @@ public class SaveData {
     }
 
     /**
+     * Returns whether or not the Save Data is valid. It is not valid when there is no data.
+     * @return True for yes, False for no.
+     */
+    public boolean isValid() {
+        if (this.data.equals("")) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Returns the number of digits in the given number.
      * @param number The number.
      * @return The number of digits.
@@ -50,19 +61,25 @@ public class SaveData {
     }
 
     /**
-     * Returns the font size that is stored here.
+     * Returns the font size that is stored here. If data is not valid, return 0.
      * @return The size of the font.
      */
     public int getFontSize() {
+        if (!this.isValid()) {
+            return 0;
+        }
         int digits = Integer.parseInt(this.data.substring(0, 1));
         return Integer.parseInt(this.data.substring(1, digits + 1));
     }
 
     /**
-     * Returns the text that is stored here.
+     * Returns the text that is stored here. If data is not valid, return empty String.
      * @return The text.
      */
     public String getText() {
+        if (!this.isValid()) {
+            return "";
+        }
         int digits = Integer.parseInt(this.data.substring(0, 1));
         return this.data.substring(digits + 1);
     }

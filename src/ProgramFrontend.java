@@ -47,4 +47,9 @@ public interface ProgramFrontend {
      */
     void sendMessage(String message);
 
+    /**
+     * Tell GUI that process has finished, so remove the loading screen.
+     */
+    void finishLoading();
+
 }
