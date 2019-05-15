@@ -254,7 +254,6 @@ public class AppData {
         } else {
             this.busy = true;
         }
-        System.out.println("Checking Credentials");
         this.checkCredentials();
         try {
             if (this.saveFileExists()) {
@@ -335,7 +334,7 @@ public class AppData {
      * Deletes all of the files in the appDataFolder. Throws Exception if Credentials are invalid.
      */
     public void deleteFiles() {
-        System.out.println("Before: ");
+        this.checkCredentials();
         this.printFileNames();
 
         try {
@@ -351,7 +350,6 @@ public class AppData {
                 Drive.Files.Delete deleter = drive.files().delete(file.getId());
                 deleter.execute();
             }
-            System.out.println("After: ");
             this.printFileNames();
         } catch (IOException e) {
             e.printStackTrace();
@@ -363,12 +361,13 @@ public class AppData {
      * Prints all of names of the files in the appDataFolder. Throws Exception if Credentials are invalid.
      */
     public void printFileNames() {
+        this.checkCredentials();
         System.out.println("Files:");
 
         // File searcher.
         Drive.Files.List fileSearch;
         try {
-            fileSearch = drive.files().list();
+            fileSearch = this.drive.files().list();
             // Where to search.
             fileSearch.setSpaces(Constants.APPDATAFOLDER);
             // Start search.
@@ -380,7 +379,6 @@ public class AppData {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new CredentialInvalidException();
         }
     }
 
