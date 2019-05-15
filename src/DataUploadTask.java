@@ -19,7 +19,7 @@ public class DataUploadTask extends Task<AppData.Results> {
     }
 
     @Override
-    protected AppData.Results call() throws Exception {
+    protected AppData.Results call() {
         if (this.appData.signIn()) {
             return this.appData.uploadData(this.uploadData);
         } else {
