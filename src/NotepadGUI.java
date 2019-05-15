@@ -197,6 +197,7 @@ public class NotepadGUI implements ProgramFrontend {
     @Override
     public void finishLoading() {
         this.background.setCenter(this.mainPane);
+        this.textArea.requestFocus();
     }
 
     /**
