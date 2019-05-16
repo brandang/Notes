@@ -22,10 +22,12 @@ public class Launcher extends Application {
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.getIcons().add(new Image(Constants.APP_ICON_PATH));
-
+        primaryStage.setOnCloseRequest(event -> controller.closeButtonPressed());
         primaryStage.show();
+        
         // Load Save Data. Do this in another thread, so that the GUI appears before data fully loads.
         controller.loadData();
+
 
         // Bring Window to front. Second line prevents this Window from always being at front when using other apps.
         primaryStage.setAlwaysOnTop(true);

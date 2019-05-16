@@ -84,7 +84,7 @@ public class NotepadController implements ProgramBackend {
 
     @Override
     public void closeButtonPressed() {
-
+        this.saveButtonPressed();
     }
 
     @Override
