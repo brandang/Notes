@@ -183,6 +183,15 @@ public class NotepadGUI implements ProgramFrontend {
         LoadingPane loadPane = new LoadingPane(this.SAVING_DATA_MESSAGE);
         this.background.setCenter(loadPane);
         this.backend.saveButtonPressed();
+        String text = this.textArea.getText();
+        // test
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) != '\n') {
+                System.out.println("" + this.textArea.getText().charAt(i));
+            } else {
+                System.out.println("\\n");
+            }
+        }
     }
 
     /**
@@ -237,7 +246,7 @@ public class NotepadGUI implements ProgramFrontend {
 
             @Override
             protected void interpolate(double fraction) {
-                // Don't do anything; just a placeholder.
+                // Don't do anything; just a placeholder to wait a few seconds.
             }
         };
         return wait;

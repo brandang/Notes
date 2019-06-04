@@ -27,13 +27,13 @@ import java.util.Collections;
  */
 
 /**
- *
  * Class that is responsible for uploading and downloading the program data from Google Drive`s appdatafolder.
  * Creates a connection.
  * Also contains many methods to manage files stored in the appdatafolder.
  */
 public class AppData {
 
+    // Results to let caller know whether actions were successful, canceled, or failed.
     public enum Results {
         SUCCESS,
         CANCELED,
@@ -167,7 +167,6 @@ public class AppData {
                 }
             }
         } catch (IOException e) {
-            System.out.println("returning1");
 //            e.printStackTrace();
             return null;
         }
@@ -181,7 +180,6 @@ public class AppData {
     private String getSaveFileID() {
         File saveFile = this.getSaveFile();
         if (saveFile == null) {
-            System.out.println("returning2");
             return null;
         } else {
             return saveFile.getId();
@@ -195,7 +193,6 @@ public class AppData {
     private String getSaveFileURL() {
         File saveFile = this.getSaveFile();
         if (saveFile == null) {
-            System.out.println("returning3");
             return null;
         } else {
             return saveFile.getDownloadUrl();
