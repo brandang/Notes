@@ -17,6 +17,8 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
+import com.google.gson.Gson;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.io.*;
 import java.util.Arrays;
@@ -195,7 +197,7 @@ public class AppData {
         if (saveFile == null) {
             return null;
         } else {
-            return saveFile.getDownloadUrl();
+            return saveFile.getId();
         }
     }
 
@@ -211,32 +213,34 @@ public class AppData {
      * Downloads and returns the app data. Throws exception if credentials are invalid.
      * @return The app data. Returns empty String if it does not exist.
      */
-    public String downloadData() {
+    public SaveData downloadData() {
         this.checkCredentials();
-        // Default value to return.
-        String data = "";
         String downloadUrl = this.getSaveFileURL();
 
         // Make sure downloadURL is valid.
         if (downloadUrl == null) {
-            return data;
+            return null;
         }
 
         // Download file to memory.
-        OutputStream output = new ByteArrayOutputStream();
-        MediaHttpDownloader downloader =
-                new MediaHttpDownloader(this.httpTransport, this.drive.getRequestFactory().getInitializer());
-        downloader.setDirectDownloadEnabled(false);
         try {
-            downloader.download(new GenericUrl(downloadUrl), output);
+            InputStream inputStream = this.drive.files().get(downloadUrl).executeMediaAsInputStream();
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+            }
+
+            Gson gson = new Gson();
+            SaveData data = gson.fromJson(stringBuilder.toString(), SaveData.class);
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
-            return data;
+            return null;
         }
-
-        // Convert to String and return.
-        data = output.toString();
-        return data;
     }
 
     /**
@@ -283,8 +287,9 @@ public class AppData {
         String fileID = this.getSaveFileID();
 
         // Save data in memory and upload.
-        System.out.println("start");
-        ByteArrayContent content = new ByteArrayContent(Constants.SAVE_FILE_TYPE, data.getBytes());
+        Gson gson = new Gson();
+        String json = gson.toJson(data, SaveData.class);
+        ByteArrayContent content = new ByteArrayContent(Constants.SAVE_FILE_TYPE, json.getBytes());
         Drive.Files.Update update = drive.files().update(fileID, fileMetadata, content);
 
         // Start uploading.

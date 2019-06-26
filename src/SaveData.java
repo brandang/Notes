@@ -1,35 +1,31 @@
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * Class that represents the Save Data. Used to encapsulate the Save Data or convert it into usable form. The Save Data
  * includes the text that the user entered, and the font the user used.
  */
-public class SaveData {
+public class SaveData implements Serializable {
 
-    private String data;
+    private int textSize = 16;
+    private ArrayList<ItemData> data;
 
     /**
      * Create a new SaveData object directly from the given String.
      * @param data The data.
      */
-    public SaveData(String data) {
+    public SaveData(ArrayList<ItemData> data) {
         this.data = data;
     }
 
     /**
      * Create a new SaveData object based on the text and the font size.
-     * @param text The text.
+     * @param data The data.
      * @param fontSize The size of the font.
      */
-    public SaveData(String text, int fontSize) {
-
-        // First character represents number of digits of the font. This character denotes how many characters
-        // following it are dedicated to storing the font size.
-        this.data = Integer.toString(this.getNumDigits(fontSize));
-
-        // The font size.
-        this.data += Integer.toString(fontSize);
-
-        // Finally, the text itself.
-        this.data += text;
+    public SaveData(ArrayList<ItemData> data, int fontSize) {
+        this.data = data;
+        this.textSize = fontSize;
     }
 
     /**
@@ -44,19 +40,10 @@ public class SaveData {
     }
 
     /**
-     * Returns the number of digits in the given number.
-     * @param number The number.
-     * @return The number of digits.
-     */
-    private int getNumDigits(int number) {
-        return (int) Math.floor(Math.abs(Math.log10(number))) + 1;
-    }
-
-    /**
      * Returns the Save Data with the text and font size in the proper save format, as a String.
      * @return The Save Data.
      */
-    public String getSaveData() {
+    public ArrayList<ItemData> getData() {
         return this.data;
     }
 
@@ -68,19 +55,6 @@ public class SaveData {
         if (!this.isValid()) {
             return 0;
         }
-        int digits = Integer.parseInt(this.data.substring(0, 1));
-        return Integer.parseInt(this.data.substring(1, digits + 1));
-    }
-
-    /**
-     * Returns the text that is stored here. If data is not valid, return empty String.
-     * @return The text.
-     */
-    public String getText() {
-        if (!this.isValid()) {
-            return "";
-        }
-        int digits = Integer.parseInt(this.data.substring(0, 1));
-        return this.data.substring(digits + 1);
+        return this.textSize;
     }
 }

@@ -31,6 +31,12 @@ public interface ProgramFrontend {
     String getText();
 
     /**
+     * Returns the SaveData that contains all the information in the Notes.
+     * @return The SaveData.
+     */
+    SaveData getSaveData();
+
+    /**
      * Sets the size of the text for the TextArea.
      * @param size The new font size.
      */

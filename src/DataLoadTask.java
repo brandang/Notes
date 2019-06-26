@@ -19,7 +19,7 @@ public class DataLoadTask extends Task<SaveData> {
     protected SaveData call() {
         if (this.appData.signIn()) {
             // Get the Save Data. Unpackage using SaveData class.
-            SaveData saveData = new SaveData(this.appData.downloadData());
+            SaveData saveData = this.appData.downloadData();
             return saveData;
         } else {
             return null;

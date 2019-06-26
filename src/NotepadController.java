@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,7 +30,16 @@ public class NotepadController implements ProgramBackend {
             SaveData saveData = task.getValue();
             if (saveData != null && saveData.isValid()) {
                 int fontSize = saveData.getFontSize();
-                String text = saveData.getText();
+                
+                // A temporary way to load the data.
+                ArrayList<ItemData> data = saveData.getData();
+                String text = "";
+                for (int i = 0; i < data.size(); i ++) {
+                    text += data.get(i).getData();
+                    if (i < data.size() - 1)
+                        text += "\n";
+                }
+
                 // Update the GUI.
                 this.frontend.setTextFontSize(fontSize);
                 this.frontend.setText(text);
@@ -54,7 +65,9 @@ public class NotepadController implements ProgramBackend {
      * @param data The data to save.
      */
     private void saveData(SaveData data) {
-        DataUploadTask task = new DataUploadTask(data.getSaveData(), this.appData);
+        // A temporary way to upload the data.
+        ArrayList<ItemData> list = data.getData();
+        DataUploadTask task = new DataUploadTask(list.get(0).getData(), this.appData);
 
         // Display messages whenever save was successful or unsuccessful.
         task.setOnSucceeded((succeededEvent) -> {
@@ -91,7 +104,7 @@ public class NotepadController implements ProgramBackend {
     public void saveButtonPressed() {
 
         // Encapsulate the Save Data.
-        SaveData data = new SaveData(this.frontend.getText(), this.frontend.getTextFontSize());
+        SaveData data = this.frontend.getSaveData();
         // Save data and send message when complete.
         this.saveData(data);
     }

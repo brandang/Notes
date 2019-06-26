@@ -1,4 +1,6 @@
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Font;
 
@@ -19,21 +21,29 @@ public class CustomTextArea extends TextArea {
     // The maximum text size.
     final private int MAX_TEXT_SIZE = 24;
 
+    private TextChangeListener listener;
+
+    private ChangeListener<String> changeListener;
+
     /**
      * Creates a CustomTextArea with no initial content.
+     * @param listener The listener that gets notified when the text changes.
      */
-    public CustomTextArea() {
+    public CustomTextArea(TextChangeListener listener) {
         super();
         this.setup();
+        this.setListener(listener);
     }
 
     /**
      * Creates a CustomTextArea with initial content.
      * @param text The text to display.
+     * @param listener The listener that gets notified when the text changes.
      */
-    public CustomTextArea(String text) {
+    public CustomTextArea(String text, TextChangeListener listener) {
         super(text);
         this.setup();
+        this.setListener(listener);
     }
 
     /**
@@ -50,6 +60,23 @@ public class CustomTextArea extends TextArea {
         this.fontSize = Constants.DEFAULT_FONT_SIZE;
         this.fontFamily = Constants.DEFAULT_FONT_FAMILY;
         this.updateFont();
+    }
+
+    /**
+     * Set the listener that should be notified when the text changes.
+     * @param listener The listener.
+     */
+    public void setListener(final TextChangeListener listener) {
+        // Remove previous listener.
+        if (this.changeListener != null)
+            this.textProperty().removeListener(this.changeListener);
+
+        this.changeListener = (observable, oldValue, newValue) -> {
+            listener.onTextChanged(newValue);
+            CustomTextArea.this.listener = listener;
+        };
+
+        this.textProperty().addListener(this.changeListener);
     }
 
     /**

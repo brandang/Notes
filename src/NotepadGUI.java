@@ -17,6 +17,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * The main GUI for the program.
  */
@@ -60,6 +64,9 @@ public class NotepadGUI implements ProgramFrontend {
     // The main content area consisting of the textArea and the info popup, as well as the menu.
     private BorderPane mainPane;
 
+    // The data to display.
+    private ItemData data;
+
     /**
      * Create a new GUI.
      */
@@ -80,11 +87,11 @@ public class NotepadGUI implements ProgramFrontend {
         this.mainPane.getStylesheets().add(Constants.BACKGROUND_STYLE_PATH);
         // Need to do this since BorderPane does not have Control as an ancestor.
         this.mainPane.getStyleClass().add("borderpane");
-
         this.setupButtons();
+        this.data = new ItemData("", ItemData.TYPE_TEXT);
 
         // The text area.
-        this.textArea = new CustomTextArea("");
+        this.textArea = new CustomTextArea("", this.data);
         // Add components to GUI.
         this.mainPane.setTop(this.menuBar);
 
@@ -180,10 +187,10 @@ public class NotepadGUI implements ProgramFrontend {
      * Saves the data and show the loading screen on the GUI.
      */
     private void saveData() {
-        LoadingPane loadPane = new LoadingPane(this.SAVING_DATA_MESSAGE);
+        LoadingPane loadPane = new LoadingPane(SAVING_DATA_MESSAGE);
         this.background.setCenter(loadPane);
         this.backend.saveButtonPressed();
-        String text = this.textArea.getText();
+        String text = this.data.getData();
         // test
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) != '\n') {
@@ -333,6 +340,13 @@ public class NotepadGUI implements ProgramFrontend {
     @Override
     public String getText() {
         return this.textArea.getText();
+    }
+
+    @Override
+    public SaveData getSaveData() {
+        ArrayList<ItemData> list = new ArrayList<>();
+        list.add(this.data);
+        return new SaveData(list, this.getTextFontSize());
     }
 
     @Override
